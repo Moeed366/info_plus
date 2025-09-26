@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
 
-class SwitcherWidget extends StatefulWidget {
-  final Function(bool) callback;
+class ToggleButtonWidget extends StatefulWidget {
   final String text;
+  final ValueChanged<bool> callback;
   final bool initialState;
-  const SwitcherWidget({
+
+  const ToggleButtonWidget({
     super.key,
-    required this.callback,
     required this.text,
+    required this.callback,
     this.initialState = true,
   });
 
   @override
-  State<SwitcherWidget> createState() => _SwitcherWidgetState();
+  State<ToggleButtonWidget> createState() => _ToggleButtonWidgetState();
 }
 
-class _SwitcherWidgetState extends State<SwitcherWidget> {
+class _ToggleButtonWidgetState extends State<ToggleButtonWidget> {
   late bool currentState;
+
   @override
   void initState() {
     super.initState();
@@ -25,27 +27,29 @@ class _SwitcherWidgetState extends State<SwitcherWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(widget.text),
-        Transform.scale(
-          scale: 0.7,
-          child: Switch(
-            value: currentState,
-            onChanged: (value) {
-              _onChanged(value);
-            },
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: ElevatedButton.icon(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: currentState
+              ? theme.colorScheme.primary
+              : theme.colorScheme.surfaceVariant,
+          foregroundColor:
+              currentState ? Colors.white : theme.colorScheme.onSurfaceVariant,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
           ),
         ),
-      ],
+        onPressed: () {
+          setState(() => currentState = !currentState);
+          widget.callback(currentState);
+        },
+        icon: Icon(
+          currentState ? Icons.check_circle : Icons.radio_button_unchecked,
+        ),
+        label: Text(widget.text),
+      ),
     );
-  }
-
-  _onChanged(bool value) {
-    setState(() {
-      currentState = !currentState;
-      widget.callback(value);
-    });
   }
 }

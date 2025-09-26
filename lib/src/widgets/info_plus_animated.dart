@@ -140,93 +140,90 @@ class InfoPlusAnimated extends StatelessWidget {
         return Positioned(
           left: (alerteHelper.maxWidth - width.value) / 2,
           top: topPosition.value,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Material(
-              elevation: 4, // gives a shadow
-              borderRadius: BorderRadius.circular(40.0),
-              color: Colors.transparent,
-              child: Dismissible(
-                key: UniqueKey(),
-                direction: DismissDirection.horizontal,
-                onDismissed: (direction) {
-                  onDismissed.call();
-                },
-                child: Opacity(
-                  opacity: opacity.value,
-                  child: Container(
-                    // margin: EdgeInsets.symmetric(horizontal: 10),
-                    width: width.value,
-                    height: height.value,
-                    decoration: BoxDecoration(
-                      // border: Border.all(color: Colors.grey.withOpacity(0.2)),
-                      color: alerteHelper.backgroundColor,
-                      borderRadius: BorderRadius.circular(40.0),
-                      boxShadow: [
-                        BoxShadow(
-                          color: alerteHelper.backgroundColor
-                              .withValues(alpha: 0.3),
-                          blurRadius: 11.0,
-                          offset: alerteHelper.isThemeDark
-                              ? const Offset(0, 1)
-                              : const Offset(0, 10),
-                        )
-                      ],
-                    ),
-                    child: Stack(
-                      // clipBehavior: Clip.antiAlias,
-                      alignment: AlignmentDirectional.centerStart,
-                      children: [
-                        Positioned(
-                          left: 10,
-                          child: Icon(
-                            alerteHelper.icon,
-                            size: 25.0,
-                            color: alerteHelper.iconColor,
+          child: Material(
+            elevation: 4, // gives a shadow
+            borderRadius: BorderRadius.circular(40.0),
+            color: Colors.transparent,
+            child: Dismissible(
+              key: UniqueKey(),
+              direction: DismissDirection.horizontal,
+              onDismissed: (direction) {
+                onDismissed.call();
+              },
+              child: Opacity(
+                opacity: opacity.value,
+                child: Container(
+                  // margin: EdgeInsets.symmetric(horizontal: 10),
+                  width: width.value,
+                  height: height.value,
+                  decoration: BoxDecoration(
+                    // border: Border.all(color: Colors.grey.withOpacity(0.2)),
+                    color: alerteHelper.backgroundColor,
+                    borderRadius: BorderRadius.circular(40.0),
+                    boxShadow: [
+                      BoxShadow(
+                        color:
+                            alerteHelper.backgroundColor.withValues(alpha: 0.3),
+                        blurRadius: 11.0,
+                        offset: alerteHelper.isThemeDark
+                            ? const Offset(0, 1)
+                            : const Offset(0, 10),
+                      )
+                    ],
+                  ),
+                  child: Stack(
+                    // clipBehavior: Clip.antiAlias,
+                    alignment: AlignmentDirectional.centerStart,
+                    children: [
+                      Positioned(
+                        left: 10,
+                        child: Icon(
+                          alerteHelper.icon,
+                          size: 25.0,
+                          color: alerteHelper.iconColor,
+                        ),
+                      ),
+                      Positioned(
+                        left: 45,
+                        child: SizedBox(
+                          width: textWidth,
+                          height: textHeight,
+                          child: Text(
+                            alerteHelper.text,
+                            style: TextStyle(color: alerteHelper.textColor),
+                            maxLines: 10,
                           ),
                         ),
+                      ),
+                      if (alerteHelper.action != null)
                         Positioned(
-                          left: 45,
-                          child: SizedBox(
-                            width: textWidth,
-                            height: textHeight,
-                            child: Text(
-                              alerteHelper.text,
-                              style: TextStyle(color: alerteHelper.textColor),
-                              maxLines: 10,
+                          left: textWidth + 48,
+                          child: ConstrainedBox(
+                            constraints: const BoxConstraints(
+                              maxWidth: 120,
+                              maxHeight: 45,
                             ),
-                          ),
-                        ),
-                        if (alerteHelper.action != null)
-                          Positioned(
-                            left: textWidth + 48,
-                            child: ConstrainedBox(
-                              constraints: const BoxConstraints(
-                                maxWidth: 120,
-                                maxHeight: 45,
+                            child: Theme(
+                              data: ThemeData(
+                                brightness: alerteHelper.isThemeDark
+                                    ? Brightness.light
+                                    : Brightness.dark,
+                                colorScheme: alerteHelper.scheme,
                               ),
-                              child: Theme(
-                                data: ThemeData(
-                                  brightness: alerteHelper.isThemeDark
-                                      ? Brightness.light
-                                      : Brightness.dark,
-                                  colorScheme: alerteHelper.scheme,
-                                ),
-                                child: TextButton(
-                                  onPressed: () =>
-                                      alerteHelper.actionCallback != null
-                                          ? alerteHelper.actionCallback!()
-                                          : null,
-                                  child: Text(
-                                    alerteHelper.action!,
-                                    textAlign: TextAlign.center,
-                                  ),
+                              child: TextButton(
+                                onPressed: () =>
+                                    alerteHelper.actionCallback != null
+                                        ? alerteHelper.actionCallback!()
+                                        : null,
+                                child: Text(
+                                  alerteHelper.action!,
+                                  textAlign: TextAlign.center,
                                 ),
                               ),
                             ),
                           ),
-                      ],
-                    ),
+                        ),
+                    ],
                   ),
                 ),
               ),

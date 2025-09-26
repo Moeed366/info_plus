@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class ThemeService {
   ThemeService._();
-  static Color primaryColor = const Color.fromARGB(255, 31, 105, 165);
+  static Color primaryColor = const Color.fromARGB(255, 234, 223, 15);
 
   static ThemeData get lightTheme => _theme(Brightness.light);
 
