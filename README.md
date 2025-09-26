@@ -1,15 +1,15 @@
-## Alert Info
+## Info PLus
 
-is an animated alert info to replace default snackbar
+is an animated alert info to replace default snack bar
 
-![Preview](example/assets/alert_pro_screen.gif)
+![Preview](example/assets/info_plus_screen.gif)
 
 ## Installation
 
-Add `info_plus` to your `pubspec.yaml` as a dependacy
+Add `info_plus` to your `pubspec.yaml` as a dependency
 
 ```yaml
-dependencies: info_plus:0.0.2
+dependencies: info_plus:0.0.1
 ```
 
 ## Usage
