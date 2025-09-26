@@ -1,10 +1,10 @@
 name: info_plus
-description: "Alert info is flutter package to display an animated alert info, warning, succes or error message from the top or bottom"
+description: "Info Plus is flutter package to display an animated alert , warning, succes or error message from the top or bottom"
 version: 0.0.1
 homepage: https://github.com/moeed366/info_plus
 repository: https://github.com/moeed366/info_plus
 screenshots:
-  - description: "Screenshot for different type of alert info"
+  - description: "Screenshot for different type of info plus"
     path: example/assets/screenshots/alert_pro_image.png
 topics:
   - snackbar

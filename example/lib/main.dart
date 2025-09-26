@@ -47,7 +47,7 @@ class _MyAppState extends State<MyApp> {
 
           return Scaffold(
             appBar: AppBar(
-              title: const Text('Alert info example'),
+              title: const Text('info plus example'),
             ),
             body: SingleChildScrollView(
               child: Column(

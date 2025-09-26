@@ -141,6 +141,8 @@ class InfoPlusAnimated extends StatelessWidget {
           left: (alerteHelper.maxWidth - width.value) / 2,
           top: topPosition.value,
           child: Material(
+            elevation: 4, // gives a shadow
+            borderRadius: BorderRadius.circular(40.0),
             color: Colors.transparent,
             child: Dismissible(
               key: UniqueKey(),
@@ -151,16 +153,18 @@ class InfoPlusAnimated extends StatelessWidget {
               child: Opacity(
                 opacity: opacity.value,
                 child: Container(
+                  // margin: EdgeInsets.symmetric(horizontal: 10),
                   width: width.value,
                   height: height.value,
                   decoration: BoxDecoration(
+                    // border: Border.all(color: Colors.grey.withOpacity(0.2)),
                     color: alerteHelper.backgroundColor,
                     borderRadius: BorderRadius.circular(40.0),
                     boxShadow: [
                       BoxShadow(
                         color:
                             alerteHelper.backgroundColor.withValues(alpha: 0.3),
-                        blurRadius: 20.0,
+                        blurRadius: 11.0,
                         offset: alerteHelper.isThemeDark
                             ? const Offset(0, 1)
                             : const Offset(0, 10),
