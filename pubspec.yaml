@@ -5,7 +5,7 @@ homepage: https://github.com/moeed366/info_plus
 repository: https://github.com/moeed366/info_plus
 screenshots:
   - description: "Screenshot for different type of info plus"
-    path: example/assets/screenshots/alert_pro_image.png
+    path: example/assets/screenshots/info_plus_image.png
 topics:
   - snackbar
   - toast

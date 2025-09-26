@@ -49,11 +49,11 @@ InfoPlus.show(
 ```
 
 |         | Light theme                                        | Dark theme                                        |
-| ------- | -------------------------------------------------- | ------------------------------------------------- |
-| info    | ![Preview](example/assets/alert_pro_light.png)    | ![Preview](example/assets/alert_pro_dark.png)    |
-| success | ![Preview](example/assets/alert_success_light.png) | ![Preview](example/assets/alert_success_dark.png) |
-| warning | ![Preview](example/assets/alert_warning_light.png) | ![Preview](example/assets/alert_warning_dark.png) |
-| error   | ![Preview](example/assets/alert_error_light.png)   | ![Preview](example/assets/alert_error_dark.png)   |
+| ------- |----------------------------------------------------|---------------------------------------------------|
+| info    | ![Preview](example/assets/info_plus_light.png)     | ![Preview](example/assets/info_plus_dark.png)     |
+| success | ![Preview](example/assets/info_success_light.png) | ![Preview](example/assets/info_success_dark.png)  |
+| warning | ![Preview](example/assets/info_warning_light.png) | ![Preview](example/assets/info_warning_dark.png) |
+| error   | ![Preview](example/assets/info_error_light.png)   | ![Preview](example/assets/info_error_dark.png)   |
 
 or change the icon by passing the `icon` as IconData
 
