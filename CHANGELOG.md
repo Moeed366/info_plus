@@ -1,4 +1,4 @@
-## Unreleased
+## 0.1.0
 
 - Fix: alerts are now removed from the overlay after they hide (previously they stayed mounted off-screen).
 - Fix: the overlay is looked up on every `show` instead of being cached once, so alerts work after the navigator/overlay is rebuilt. The public top-level `overlayState` variable was removed.
@@ -12,6 +12,6 @@
 
 ## 0.0.1
 
-- : Initial release
+- Initial release
 
 

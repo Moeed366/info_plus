@@ -1,8 +1,9 @@
 name: info_plus
-description: "Info Plus is flutter package to display an animated alert , warning, succes or error message from the top or bottom"
-version: 0.0.1
+description: "An animated alternative to SnackBar: show info, success, warning or error messages that slide in from the top or bottom of the screen."
+version: 0.1.0
 homepage: https://github.com/moeed366/info_plus
 repository: https://github.com/moeed366/info_plus
+issue_tracker: https://github.com/moeed366/info_plus/issues
 screenshots:
   - description: "Screenshot for different type of info plus"
     path: example/assets/screenshots/info_plus_image.png

@@ -10,7 +10,7 @@ Add `info_plus` to your `pubspec.yaml` as a dependency
 
 ```yaml
 dependencies:
-  info_plus: ^0.0.1
+  info_plus: ^0.1.0
 ```
 
 ## Usage
