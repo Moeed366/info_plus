@@ -21,10 +21,10 @@ void main() async {
 
       expect(alerteText, findsOneWidget);
 
-      final iconInfo = find.byIcon(Icons.error_outline);
+      final iconInfo = find.byIcon(Icons.info_outline);
       final iconWarning = find.byIcon(Icons.warning_amber_rounded);
       final iconSuccess = find.byIcon(Icons.check_circle_outline);
-      final iconError = find.byIcon(Icons.help_outline);
+      final iconError = find.byIcon(Icons.error_outline);
 
       expect(iconInfo, findsNothing);
       expect(iconWarning, findsNothing);

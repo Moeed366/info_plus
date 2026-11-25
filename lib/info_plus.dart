@@ -7,75 +7,9 @@ enum MessagePosition { top, bottom }
 enum TypeInfo { warning, error, success, info }
 
 OverlayEntry? _previousEntry;
-OverlayState? overlayState;
 
-class InfoPlus {
-  ///represents a handle to the location of a widget in the widget tree
-  final BuildContext context;
-
-  ///The text to be displayed
-  final String text;
-
-  ///The position of the alerte info `Top` or `Bottom`
-  ///
-  ///By default is [MessagePosition.top]
-  ///
-  ///to display the alrte info at the bottom
-  ///use [MessagePosition.bottom]
-  final MessagePosition position;
-
-  ///The padding from top or bottom
-  ///
-  ///by default `padding = 30`
-  final double padding;
-
-  ///The duration in seconde of the alert info
-  ///
-  ///by default `duration = 3` seconde
-  final int duration;
-
-  ///Optionnal : background color
-  ///
-  ///by default the surface color of the inverse theme
-  final Color? backgroundColor;
-
-  ///Optionnal : text color
-  ///
-  ///by default the onSurface color of the inverse theme
-  ///
-  final Color? textColor;
-
-  ///Optionnal : icon color
-  ///
-  ///by default depond on [TypeInfo] and [ThemeMode]
-  ///
-  /// - `info` : ThemeMode is dark `greenAccent` else `green`
-  /// - `success` : ThemeMode is dark `greenAccent` else `green`
-  /// - `warning` : ThemeMode is dark `orangeAccent` else `orange`
-  /// - `error` : ThemeMode is dark `redAccent` else `red`
-  final Color? iconColor;
-
-  /// Optional callback that is called when the [action] is clicked.
-  final Color? actionColor;
-  final String? action;
-
-  /// Optional : action color
-  ///
-  /// by default the color of TextButton of the inverse theme
-  final Function? actionCallback;
-
-  /// Optional : icon to diplay
-  ///
-  /// by default depend of [TypeInfo]
-  final IconData? icon;
-
-  /// Optional : [TypeInfo] `warning`, `error`, `success`, `info`
-  ///
-  /// by default `TypeInfo.info`
-  ///
-  /// Change the icon and his color
-  final TypeInfo typeInfo;
-
+/// Displays an animated alert info. Use [InfoPlus.show].
+abstract final class InfoPlus {
   ///Display an animated Alert info
   ///
   ///Require the context and the text to be displayed
@@ -89,34 +23,46 @@ class InfoPlus {
   /// );
   /// ```
   ///
-  /// [typeInfo] : to change the type of the alert by default `TypeInfo.info`
+  /// - [text] : the text to be displayed
+  /// - [position] : `MessagePosition.top` (default) or `MessagePosition.bottom`
+  /// - [padding] : the padding from top or bottom, by default `30`
+  /// - [duration] : the duration in seconds the alert stays visible, by default `3`
+  /// - [typeInfo] : the type of the alert, by default `TypeInfo.info`.
+  ///   It changes the default [icon] and [iconColor]:
+  ///   - [TypeInfo.info] : `Icons.info_outline`, green
+  ///   - [TypeInfo.success] : `Icons.check_circle_outline`, green
+  ///   - [TypeInfo.warning] : `Icons.warning_amber_rounded`, orange
+  ///   - [TypeInfo.error] : `Icons.error_outline`, red
   ///
-  /// - [TypeInfo.info] : [icon]=`Icons.error_outline`, [iconColor]=`green`
-  /// - [TypeInfo.warning] : [icon]=`Icons.warning_amber_rounded`, [iconColor]=`orange`
-  /// - [TypeInfo.success] : [icon]=`Icons.check_circle_outline`, [iconColor]=`green`
-  /// - [TypeInfo.error] : [icon]=`Icons.help_outline`, [iconColor]=`red`
-  ///
-  /// [position] : the position of the alert by default `MessagePosition.top`
-  InfoPlus.show({
-    required this.context,
-    required this.text,
-    this.position = MessagePosition.top,
-    this.padding = 30.0,
-    this.duration = 3,
-    this.typeInfo = TypeInfo.info,
-    this.backgroundColor,
-    this.textColor,
-    this.iconColor,
-    this.actionColor,
-    this.action,
-    this.actionCallback,
-    this.icon,
+  ///   The icon color uses the accent shade (e.g. `greenAccent`) when the
+  ///   app theme is light (dark alert), and the regular shade (e.g. `green`)
+  ///   when the app theme is dark (light alert).
+  /// - [backgroundColor] : by default the surface color of the inverse theme
+  /// - [textColor] : by default the onSurface color of the inverse theme
+  /// - [action] : optional label of an action button
+  /// - [actionColor] : text color of the action, by default the primary
+  ///   color of the inverse theme
+  /// - [actionCallback] : called when the [action] is pressed; the alert is
+  ///   then dismissed
+  static void show({
+    required BuildContext context,
+    required String text,
+    MessagePosition position = MessagePosition.top,
+    double padding = 30.0,
+    int duration = 3,
+    TypeInfo typeInfo = TypeInfo.info,
+    Color? backgroundColor,
+    Color? textColor,
+    Color? iconColor,
+    Color? actionColor,
+    String? action,
+    VoidCallback? actionCallback,
+    IconData? icon,
   }) {
-    _buildInfoPlus();
-  }
+    final OverlayState? overlayState = Overlay.maybeOf(context);
+    if (overlayState == null) return;
 
-  _buildInfoPlus() {
-    InfoPlusHelper alerteHelper = InfoPlusHelper(
+    final helper = InfoPlusHelper(
       context: context,
       text: text,
       position: position,
@@ -132,16 +78,16 @@ class InfoPlus {
       icon: icon,
     );
 
-    overlayState ??= Overlay.of(context);
-
-    late OverlayEntry overlayEntry;
+    late final OverlayEntry overlayEntry;
     overlayEntry = OverlayEntry(
       builder: (context) {
         return InfoPlusWidget(
-          alerteHelper: alerteHelper,
+          helper: helper,
           onDismissed: () {
-            if (overlayEntry.mounted && _previousEntry == overlayEntry) {
+            if (overlayEntry.mounted) {
               overlayEntry.remove();
+            }
+            if (_previousEntry == overlayEntry) {
               _previousEntry = null;
             }
           },
@@ -149,11 +95,9 @@ class InfoPlus {
       },
     );
     if (_previousEntry != null && _previousEntry!.mounted) {
-      _previousEntry?.remove();
+      _previousEntry!.remove();
     }
-    if (overlayState != null) {
-      overlayState!.insert(overlayEntry);
-      _previousEntry = overlayEntry;
-    }
+    overlayState.insert(overlayEntry);
+    _previousEntry = overlayEntry;
   }
 }

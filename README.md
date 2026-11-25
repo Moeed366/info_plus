@@ -9,7 +9,8 @@ is an animated alert info to replace default snack bar
 Add `info_plus` to your `pubspec.yaml` as a dependency
 
 ```yaml
-dependencies: info_plus:0.0.1
+dependencies:
+  info_plus: ^0.0.1
 ```
 
 ## Usage
@@ -33,10 +34,10 @@ InfoPlus.show(
 
 Different type of alert to change the icon and color
 
-- TypeInfo.info
-- TypeInfo.success
-- TypeInfo.warning
-- TypeInfo.error
+- `TypeInfo.info` : `Icons.info_outline`, green
+- `TypeInfo.success` : `Icons.check_circle_outline`, green
+- `TypeInfo.warning` : `Icons.warning_amber_rounded`, orange
+- `TypeInfo.error` : `Icons.error_outline`, red
 
 to change the type of alert use `typeInfo` param
 
@@ -112,7 +113,9 @@ if the current ThemeMode is `Light`the alert use dark theme. Otherwise use light
 
 - `backgroundColor` : to change the backgroud color of alert by default is surface color of opposite theme.
 - `textColor` : the text color of the message by default is onSurface color of opposite theme.
-- `actionColor` : the text color of the action by default is TextButton color color of opposite theme.
+- `actionColor` : the text color of the action, by default the primary color of the opposite theme.
+
+Pressing the action calls `actionCallback` and then dismisses the alert.
 
 ### Duration and dismiss (Optinal)
 

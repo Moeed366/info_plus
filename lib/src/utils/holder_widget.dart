@@ -4,12 +4,12 @@ import 'package:info_plus/src/utils/alert_helper.dart';
 class HolderWidget extends StatelessWidget {
   final GlobalKey globalKey;
   final GlobalKey textKey;
-  final InfoPlusHelper alerteHelper;
+  final InfoPlusHelper helper;
   const HolderWidget({
     super.key,
     required this.globalKey,
     required this.textKey,
-    required this.alerteHelper,
+    required this.helper,
   });
 
   @override
@@ -38,18 +38,18 @@ class HolderWidget extends StatelessWidget {
                     right: 10,
                   ),
                   child: Icon(
-                    alerteHelper.icon,
+                    helper.icon,
                     size: 25.0,
                   ),
                 ),
                 Flexible(
                   child: Text(
                     key: textKey,
-                    alerteHelper.text,
+                    helper.text,
                   ),
                 ),
-                if (alerteHelper.action == null) const SizedBox(width: 10),
-                if (alerteHelper.action != null)
+                if (helper.action == null) const SizedBox(width: 10),
+                if (helper.action != null)
                   Padding(
                     padding: const EdgeInsets.only(left: 3, right: 2),
                     child: ConstrainedBox(
@@ -60,7 +60,7 @@ class HolderWidget extends StatelessWidget {
                       child: TextButton(
                         onPressed: () {},
                         child: Text(
-                          alerteHelper.action!,
+                          helper.action!,
                         ),
                       ),
                     ),

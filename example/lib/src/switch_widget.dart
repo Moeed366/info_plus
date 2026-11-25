@@ -34,7 +34,7 @@ class _ToggleButtonWidgetState extends State<ToggleButtonWidget> {
         style: ElevatedButton.styleFrom(
           backgroundColor: currentState
               ? theme.colorScheme.primary
-              : theme.colorScheme.surfaceVariant,
+              : theme.colorScheme.surfaceContainerHighest,
           foregroundColor:
               currentState ? Colors.white : theme.colorScheme.onSurfaceVariant,
           shape: RoundedRectangleBorder(

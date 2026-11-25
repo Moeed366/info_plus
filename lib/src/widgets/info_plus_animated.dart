@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:info_plus/src/utils/alert_helper.dart';
 
 class InfoPlusAnimated extends StatelessWidget {
-  final InfoPlusHelper alerteHelper;
+  final InfoPlusHelper helper;
   final double finalWidth;
   final double finalHeight;
   final double textWidth;
@@ -13,6 +13,8 @@ class InfoPlusAnimated extends StatelessWidget {
   final Animation<double> height;
   final Animation<double> topPosition;
   final VoidCallback onDismissed;
+  final VoidCallback onActionPressed;
+  final Key dismissKey;
 
   static const sequence1 = 30.0;
   static const sequence23 = 70.0;
@@ -21,12 +23,14 @@ class InfoPlusAnimated extends StatelessWidget {
   InfoPlusAnimated({
     super.key,
     required this.controller,
-    required this.alerteHelper,
+    required this.helper,
     required this.finalWidth,
     required this.finalHeight,
     required this.textWidth,
     required this.textHeight,
     required this.onDismissed,
+    required this.onActionPressed,
+    required this.dismissKey,
   })  : opacity = Tween<double>(
           begin: 0.0,
           end: 1.0,
@@ -44,14 +48,12 @@ class InfoPlusAnimated extends StatelessWidget {
           <TweenSequenceItem<double>>[
             TweenSequenceItem<double>(
               tween: Tween(
-                begin: alerteHelper.isTop
+                begin: helper.isTop
                     ? -(finalHeight + 10)
-                    : alerteHelper.maxHeight + finalHeight,
-                end: alerteHelper.isTop
-                    ? alerteHelper.padding
-                    : alerteHelper.maxHeight -
-                        alerteHelper.padding -
-                        finalHeight,
+                    : helper.maxHeight + finalHeight,
+                end: helper.isTop
+                    ? helper.padding
+                    : helper.maxHeight - helper.padding - finalHeight,
               ).chain(
                 CurveTween(curve: Curves.easeInOut),
               ),
@@ -59,11 +61,9 @@ class InfoPlusAnimated extends StatelessWidget {
             ),
             TweenSequenceItem<double>(
               tween: ConstantTween<double>(
-                alerteHelper.isTop
-                    ? alerteHelper.padding
-                    : alerteHelper.maxHeight -
-                        alerteHelper.padding -
-                        finalHeight,
+                helper.isTop
+                    ? helper.padding
+                    : helper.maxHeight - helper.padding - finalHeight,
               ),
               weight: sequence23,
             ),
@@ -138,14 +138,14 @@ class InfoPlusAnimated extends StatelessWidget {
       animation: controller,
       builder: (context, _) {
         return Positioned(
-          left: (alerteHelper.maxWidth - width.value) / 2,
+          left: (helper.maxWidth - width.value) / 2,
           top: topPosition.value,
           child: Material(
             elevation: 4, // gives a shadow
             borderRadius: BorderRadius.circular(40.0),
             color: Colors.transparent,
             child: Dismissible(
-              key: UniqueKey(),
+              key: dismissKey,
               direction: DismissDirection.horizontal,
               onDismissed: (direction) {
                 onDismissed.call();
@@ -158,14 +158,13 @@ class InfoPlusAnimated extends StatelessWidget {
                   height: height.value,
                   decoration: BoxDecoration(
                     // border: Border.all(color: Colors.grey.withOpacity(0.2)),
-                    color: alerteHelper.backgroundColor,
+                    color: helper.backgroundColor,
                     borderRadius: BorderRadius.circular(40.0),
                     boxShadow: [
                       BoxShadow(
-                        color:
-                            alerteHelper.backgroundColor.withValues(alpha: 0.3),
+                        color: helper.backgroundColor.withValues(alpha: 0.3),
                         blurRadius: 11.0,
-                        offset: alerteHelper.isThemeDark
+                        offset: helper.isThemeDark
                             ? const Offset(0, 1)
                             : const Offset(0, 10),
                       )
@@ -178,9 +177,9 @@ class InfoPlusAnimated extends StatelessWidget {
                       Positioned(
                         left: 10,
                         child: Icon(
-                          alerteHelper.icon,
+                          helper.icon,
                           size: 25.0,
-                          color: alerteHelper.iconColor,
+                          color: helper.iconColor,
                         ),
                       ),
                       Positioned(
@@ -189,13 +188,13 @@ class InfoPlusAnimated extends StatelessWidget {
                           width: textWidth,
                           height: textHeight,
                           child: Text(
-                            alerteHelper.text,
-                            style: TextStyle(color: alerteHelper.textColor),
+                            helper.text,
+                            style: TextStyle(color: helper.textColor),
                             maxLines: 10,
                           ),
                         ),
                       ),
-                      if (alerteHelper.action != null)
+                      if (helper.action != null)
                         Positioned(
                           left: textWidth + 48,
                           child: ConstrainedBox(
@@ -203,22 +202,14 @@ class InfoPlusAnimated extends StatelessWidget {
                               maxWidth: 120,
                               maxHeight: 45,
                             ),
-                            child: Theme(
-                              data: ThemeData(
-                                brightness: alerteHelper.isThemeDark
-                                    ? Brightness.light
-                                    : Brightness.dark,
-                                colorScheme: alerteHelper.scheme,
+                            child: TextButton(
+                              style: TextButton.styleFrom(
+                                foregroundColor: helper.actionColor,
                               ),
-                              child: TextButton(
-                                onPressed: () =>
-                                    alerteHelper.actionCallback != null
-                                        ? alerteHelper.actionCallback!()
-                                        : null,
-                                child: Text(
-                                  alerteHelper.action!,
-                                  textAlign: TextAlign.center,
-                                ),
+                              onPressed: onActionPressed,
+                              child: Text(
+                                helper.action!,
+                                textAlign: TextAlign.center,
                               ),
                             ),
                           ),

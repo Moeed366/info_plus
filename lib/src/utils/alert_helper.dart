@@ -7,7 +7,7 @@ class InfoPlusHelper {
   final double padding;
   final int duration;
   final String? action;
-  final Function? actionCallback;
+  final VoidCallback? actionCallback;
   final TypeInfo typeInfo;
   late IconData icon;
   late ColorScheme scheme;
@@ -47,7 +47,7 @@ class InfoPlusHelper {
     _backgroundColor = backgroundColor ?? scheme.surface;
     _textColor = textColor ?? scheme.onSurface;
     _iconColor = iconColor ?? _getIconColor();
-    _actionColor = actionColor ?? scheme.primaryFixed;
+    _actionColor = actionColor ?? scheme.primary;
     this.icon = icon ?? _getIcon();
   }
 
@@ -59,13 +59,13 @@ class InfoPlusHelper {
   IconData _getIcon() {
     switch (typeInfo) {
       case TypeInfo.info:
-        return Icons.error_outline;
+        return Icons.info_outline;
       case TypeInfo.warning:
         return Icons.warning_amber_rounded;
       case TypeInfo.success:
         return Icons.check_circle_outline;
       case TypeInfo.error:
-        return Icons.help_outline;
+        return Icons.error_outline;
     }
   }
 

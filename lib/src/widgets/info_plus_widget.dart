@@ -5,12 +5,12 @@ import 'package:info_plus/src/widgets/info_plus_animated.dart';
 
 class InfoPlusWidget extends StatefulWidget {
   final VoidCallback onDismissed;
-  final InfoPlusHelper alerteHelper;
+  final InfoPlusHelper helper;
 
   const InfoPlusWidget({
     super.key,
     required this.onDismissed,
-    required this.alerteHelper,
+    required this.helper,
   });
 
   @override
@@ -18,15 +18,16 @@ class InfoPlusWidget extends StatefulWidget {
 }
 
 class _InfoPlusWidgetState extends State<InfoPlusWidget>
-    with TickerProviderStateMixin {
+    with SingleTickerProviderStateMixin {
   final GlobalKey _globalKey = GlobalKey();
   final GlobalKey _textKey = GlobalKey();
-  bool isInnited = false;
+  final Key _dismissKey = UniqueKey();
+  bool _isInitialized = false;
+  bool _isDismissed = false;
   late double finalHeight;
   late double finalWidth;
   late double textWidth;
   late double textHeight;
-  bool _isDissmissed = false;
   late AnimationController _controller;
 
   @override
@@ -36,6 +37,20 @@ class _InfoPlusWidgetState extends State<InfoPlusWidget>
       duration: const Duration(milliseconds: 400),
       vsync: this,
     );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      final boxSize = _globalKey.currentContext?.size;
+      final textSize = _textKey.currentContext?.size;
+      if (boxSize == null || textSize == null) return;
+      setState(() {
+        finalHeight = boxSize.height;
+        finalWidth = boxSize.width;
+        textWidth = textSize.width;
+        textHeight = textSize.height;
+        _isInitialized = true;
+      });
+      _playAnimation();
+    });
   }
 
   @override
@@ -46,59 +61,58 @@ class _InfoPlusWidgetState extends State<InfoPlusWidget>
 
   Future<void> _playAnimation() async {
     try {
-      await _controller.forward();
-      Future.delayed(Duration(seconds: widget.alerteHelper.duration)).then((_) {
-        if (mounted && !_isDissmissed) {
-          _controller.reverse();
-        }
-      });
+      await _controller.forward().orCancel;
+      await Future.delayed(Duration(seconds: widget.helper.duration));
+      if (!mounted || _isDismissed) return;
+      await _hide();
     } on TickerCanceled {
-      //Ticker canceled
+      //Ticker canceled (widget disposed or animation stopped)
     }
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (!isInnited) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        finalHeight = _globalKey.currentContext!.size!.height;
-        finalWidth = _globalKey.currentContext!.size!.width;
-        textWidth = _textKey.currentContext!.size!.width;
-        textHeight = _textKey.currentContext!.size!.height;
-        _playAnimation();
-        setState(() {
-          isInnited = true;
-        });
-      });
+  /// Plays the exit animation, then removes the alert from the overlay.
+  Future<void> _hide() async {
+    try {
+      await _controller.reverse().orCancel;
+    } on TickerCanceled {
+      return;
     }
+    _dismiss();
+  }
+
+  void _dismiss() {
+    if (_isDismissed) return;
+    _isDismissed = true;
+    _controller.stop();
+    widget.onDismissed();
   }
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        if (!isInnited)
+        if (!_isInitialized)
           Positioned(
-            top: -widget.alerteHelper.maxWidth,
+            top: -widget.helper.maxHeight,
             child: HolderWidget(
               globalKey: _globalKey,
               textKey: _textKey,
-              alerteHelper: widget.alerteHelper,
+              helper: widget.helper,
             ),
           ),
-        if (isInnited)
+        if (_isInitialized)
           InfoPlusAnimated(
-            alerteHelper: widget.alerteHelper,
+            helper: widget.helper,
             controller: _controller.view,
+            dismissKey: _dismissKey,
             finalWidth: finalWidth,
             finalHeight: finalHeight,
             textWidth: textWidth,
             textHeight: textHeight,
-            onDismissed: () {
-              _isDissmissed = true;
-              _controller.stop();
-              widget.onDismissed();
+            onDismissed: _dismiss,
+            onActionPressed: () {
+              widget.helper.actionCallback?.call();
+              if (!_isDismissed) _hide();
             },
           ),
       ],
